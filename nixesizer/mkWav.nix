@@ -1,7 +1,7 @@
 { data, rate, depth }: name:
 let
-  inherit (import ./utils.nix) hex8 hex16 hex32 mod;
   inherit (builtins) floor length;
+  inherit (import ./utils.nix) hex8 hex16 hex32 mod;
   pkgs = import <nixpkgs> {};
 
   dataBytes = toString (map (if depth == 1 then
