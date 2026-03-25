@@ -1,8 +1,9 @@
 let
   inherit (builtins) floor concatMap elemAt;
 in rec {
-  mod = a: b: a - floor (a / b) * b;
+  clip = x: if x < 0.0 then 0 else if x > 1.0 then 1 else x;
   abs = x: if x < 0.0 then -x else x;
+  mod = a: b: a - floor (a / b) * b;
 
   hexDigits = ["0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "a" "b" "c" "d" "e" "f"];
   hex = concatMap (x: map (y: x + y) hexDigits) hexDigits;

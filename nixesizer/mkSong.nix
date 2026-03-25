@@ -5,7 +5,8 @@
   depth,
 }: name:
 let
-  inherit (builtins) foldl' genList length;
+  inherit (builtins) foldl' genList;
+  inherit (import ./utils.nix) clip;
   mkWav = import ./mkWav.nix;
 
   loudData = genList (
@@ -14,10 +15,10 @@ let
     in
       foldl' (
         acc: track:
-          acc + (track.inst (track.ptrn time) time)
+          acc + (track.inst (track.ptrn time) time) * track.vol
       ) 0 tracks
   ) (duration * rate);
-  data = map (x: x / (length tracks + 0.0)) loudData;
+  data = map clip loudData;
 in
   mkWav {
     inherit data rate depth;
