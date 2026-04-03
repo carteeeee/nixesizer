@@ -1,24 +1,28 @@
 let
-  inherit (builtins) elemAt floor length;
-  inherit (import ./utils.nix) mod;
-in {
+  inherit (builtins) elemAt floor foldl' length;
+  inherit (import ./utils.nix) ifNull mod;
+in rec {
+  # takes a function `p` and a LENGTH `l` and
+  # creates a PATTERN from it
+  complete = p: l: {
+    __functor = (self: t: if t < self.l then (self.p) t else null);
+    inherit p l;
+  };
+
   ## modifiers ##
   # apply a SCALE `s` to the outputs of a PATTERN `p`
-  scale = p: s: t: s (p t);
-  # plays PATTERN `p` for LENGTH `l` then returns 0
-  timed = p: l: t: if t <= l then p t else 0;
-  # loops a PATTERN `p` for LENGTH `l`
-  loop = p: l: t: p (mod t l);
-  # takes in two PATTERNs `p1` and `p2` and two LENGTHs
-  # `l1` and `l2` and outputs a PATTERN that plays `p1`
-  # for `l1` seconds, then `p2` for `l2` seconds
-  concat = p1: p2: l1: l2: t:
-    if t <= l1 then p1 t else
-    if t <= (l1 + l2) then p2 (t - l1) else 0;
+  scale = p: s: complete (t: ifNull (p t) null s) p.l;
+  # plays the PATTERNs `p1` and `p2` in sequence
+  concat2 = p1: p2: complete
+    (t: if t < p1.l then p1.p t else p2.p (t - p1.l))
+    (p1.l + p2.l);
+  # plays the PATTERN[] `p` in sequence
+  concat = p: foldl' (acc: ptrn: if acc == null then ptrn else concat2 acc ptrn) null p;
 
   ## base patterns ##
+  ## these all also take a LENGTH `l` at the end
   # plays a single note at FREQUENCY `f`
-  solid = f: t: f;
-  # plays an arp at the FREQUENCIES `f` at `b` bpm
-  arp = f: b: t: elemAt f (floor (mod (t * b / 60.0) (length f)));
+  solid = f: complete (t: f);
+  # plays an arp at the FREQUENCY[] `f` at `b` bpm
+  arp = f: b: complete (t: elemAt f (floor (mod (t * b / 60.0) (length f))));
 }

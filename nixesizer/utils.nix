@@ -9,6 +9,8 @@ in rec {
   mod = a: b: a - floor (a / b) * b;
   # index into a list `l` but loop
   index = l: i: elemAt l (mod i (length l));
+  # if the value `v` is null, return `n`, otherwise return `f v`
+  ifNull = v: n: f: if v == null then n else f v;
 
   # natural log of 2
   ln2 = 0.69314718056; # thank you desmos

@@ -6,7 +6,7 @@
 }: name:
 let
   inherit (builtins) foldl' genList;
-  inherit (import ./utils.nix) clip;
+  inherit (import ./utils.nix) clip ifNull;
   mkWav = import ./mkWav.nix;
 
   loudData = genList (
@@ -15,7 +15,7 @@ let
     in
       foldl' (
         acc: track:
-          acc + (track.inst (track.ptrn time) time) * track.vol
+          acc + (ifNull (track.ptrn time) (x: 0) track.inst time) * track.vol
       ) 0 tracks
   ) (duration * rate);
   data = map clip loudData;
