@@ -20,9 +20,12 @@ in rec {
   concat = p: foldl' (acc: ptrn: if acc == null then ptrn else concat2 acc ptrn) null p;
 
   ## base patterns ##
-  ## these all also take a LENGTH `l` at the end
-  # plays a single note at FREQUENCY `f`
+  # plays a single note at FREQUENCY `f` for LENGTH `l`
   solid = f: complete (t: f);
-  # plays an arp at the FREQUENCY[] `f` at `b` bpm
-  arp = f: b: complete (t: elemAt f (floor (mod (t * b / 60.0) (length f))));
+  # plays an arp at the FREQUENCY[] `f` at `b` bpm for INT `l` times
+  arp = f: b: l: complete
+    (t: elemAt f (floor (mod (t * b / 60.0) (length f))))
+    (60.0 / b * (length f) * l);
+  # plays the sequence of FREQUENCY[] `f` at `b` bpm once
+  seq = f: b: arp f b 1;
 }
