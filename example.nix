@@ -1,42 +1,17 @@
 let
   inherit (import ./nixesizer) mkSong insts ptrns scales;
+  n = null;
+  k = 50.0;
+  s = 150.0;
+  h = 400.0;
 in
   mkSong {
     tracks = [
-      {vol = 0.7; inst = insts.tri;
-      ptrn = ptrns.scale (
-        ptrns.seq [
-          12 14 15 17
-          14 14 10 12
-          12 12 12 12
-        ] 380
-      ) (scales.western 220);}
-      {vol = 0.1; inst = insts.sqr;
-      ptrn = ptrns.scale (
-        ptrns.seq [
-           8  8  8  8
-          10 10 10 12
-          12 12 12 12
-        ] 380
-      ) (scales.western 110);}
-      {vol = 0.1; inst = insts.sqr;
-      ptrn = ptrns.scale (
-        ptrns.seq [
-          12 12 12 12
-          14 14 14 15
-          15 15 15 15
-        ] 380
-      ) (scales.western 110);}
-      {vol = 0.1; inst = insts.sqr;
-      ptrn = ptrns.scale (
-        ptrns.seq [
-          15 15 15 15
-          17 17 17 19
-          19 19 19 19
-        ] 380
-      ) (scales.western 110);}
+      {vol = 1.0; inst = insts.noise;
+      ptrn = ptrns.arp [k k n n h n n n s s s s h n n n
+                        k k n n h n h n s s s s h n n n] 960 2;}
     ];
-    duration = 8;
+    duration = 4;
     rate = 48000;
     depth = 4;
   } "examplesong"

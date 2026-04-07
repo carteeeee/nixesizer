@@ -18,7 +18,7 @@ in rec {
   epf = f: 1 + f * (1 + f / 2 * (1 + f / 3 * (1 + f / 4)));
   # Two to the Power of the Inverse of X
   tpix = x: epf (ln2 / x);
-  # x^y for integers
+  # x^y where y is an integer
   pow = x: y: if y <= 0 then 1 else x * (pow x (y - 1));
 
   # little-endian hex tools
