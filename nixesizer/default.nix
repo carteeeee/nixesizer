@@ -1,4 +1,5 @@
 {
+  mkWav = import ./mkWav.nix;
   mkSong = import ./mkSong.nix;
   utils = import ./utils.nix;
   insts = import ./insts.nix;
