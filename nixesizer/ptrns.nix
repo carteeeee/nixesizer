@@ -20,6 +20,8 @@ in rec {
   ## base patterns ##
   # plays a single note at FREQUENCY `f` for LENGTH `l`
   solid = f: complete (t: f);
+  # plays a single note at FREQUENCY `f` for `l` beats at `b` bpm
+  hold = f: b: l: solid f (60.0 / b * l);
   # plays an arp at the FREQUENCY[] `f` at `b` bpm for INT `l` times
   arp = f: b: l: complete
     (t: elemAt f (floor (mod (t * b / 60.0) (length f))))

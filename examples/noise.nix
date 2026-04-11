@@ -1,7 +1,9 @@
 let
   inherit (import ../nixesizer) mkWav mkSong insts ptrns;
   rate = 48000;
+  depth = 4;
   tempo = 120;
+
   n = null;
   k = 50.0;
   s = 150.0;
@@ -17,6 +19,5 @@ in
       duration = 4;
       inherit rate;
     };
-    depth = 4;
-    inherit rate;
+    inherit rate depth;
   } "nixesizer-noise-example"
