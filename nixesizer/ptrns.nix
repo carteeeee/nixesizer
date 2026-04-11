@@ -1,6 +1,6 @@
 let
   inherit (builtins) elemAt floor foldl' length;
-  inherit (import ./utils.nix) ifNull mod;
+  inherit (import ./utils.nix) mod;
 in rec {
   # takes a function `p` and a LENGTH `l` and
   # creates a PATTERN from it
@@ -10,8 +10,6 @@ in rec {
   };
 
   ## modifiers ##
-  # apply a SCALE `s` to the outputs of a PATTERN `p`
-  scale = p: s: complete (t: ifNull (p t) null s) p.l;
   # plays the PATTERNs `p1` and `p2` in sequence
   concat2 = p1: p2: complete
     (t: if t < p1.l then p1.p t else p2.p (t - p1.l))
@@ -28,4 +26,6 @@ in rec {
     (60.0 / b * (length f) * l);
   # plays the sequence of FREQUENCY[] `f` at `b` bpm once
   seq = f: b: arp f b 1;
+  # plays nothing for `l` beats at `b` bpm
+  empty = b: l: complete (t: null) (60.0 / b * l);
 }

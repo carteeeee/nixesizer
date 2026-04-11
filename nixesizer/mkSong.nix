@@ -4,7 +4,7 @@
   rate,
 }:
 let
-  inherit (builtins) foldl' genList;
+  inherit (builtins) floor foldl' genList;
   inherit (import ./utils.nix) clip ifNull;
 in
   map clip (genList (
@@ -13,6 +13,6 @@ in
     in
       foldl' (
         acc: track:
-          acc + (ifNull (track.ptrn time) (x: 0) track.inst time) * track.vol
+          acc + (ifNull (ifNull (track.ptrn time) null track.scale) (x: 0) track.inst time) * track.vol
       ) 0 tracks
-  ) (duration * rate))
+  ) (floor (duration * rate)))

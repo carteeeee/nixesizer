@@ -8,11 +8,14 @@ in rec {
   # creates a SCALE that repeats at the octave (doubling of frequency)
   # using the table `t` in range of [1.0, 2.0) and a base frequency `b`
   octave = t: b: n: index t n * (pow 2 (n / (length t))) * b;
-  # create a SCALE with `d` equal divisions of the octave
+  # creates a SCALE with `d` equal divisions of the octave
   edo = d: octave (genList (x: pow (tpix d) x) d);
-  # create a SCALE where each note is a multiple of the inverse of
+  # creates a SCALE where each note is a multiple of the inverse of
   # `d` (useful for JI)
   inverse = d: octave (genList (x: x / d) d);
+  # creates a SCALE that simply returns the input value, useful
+  # for inputting raw FREQUENCIES to instruments
+  raw = x: x;
 
   # shortcut for standard western 12 notes per octave
   western = edo 12;
