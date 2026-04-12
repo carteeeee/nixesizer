@@ -9,7 +9,7 @@ let
   row = tempo * 8; # tempo for the actual rows
   duration = (60.0 / tempo * 8.0); # 64 rows
   
-  base = 36299 / (utils.pow 2 7);
+  base = 36299.0 / (utils.pow 2 7);
 
   mainScale = scales.western base;
   downScale = scales.western (base / 2);
@@ -25,7 +25,7 @@ let
 
   n = null;
 
-  echo = p: ptrns.concat [(ptrns.empty row 8) p];
+  echo = d: p: ptrns.concat [(ptrns.empty row d) p];
 
   initialBass = [12 12 12 12 n n n n 7 7 n n n n 7 n];
   mainBass = ptrns.concat [
@@ -84,7 +84,7 @@ let
     0  0  0  0  n  n  n  n  n  n  n  n  n  n  n  n
   ] row;
 
-  mainLeadEcho = echo mainLead;
+  mainLeadEcho = echo 8 mainLead;
 
   bridgeLead = ptrns.seq [
     5  9  12 9  12 17 12 17 21 17 21 24 21 24 29 33
@@ -93,7 +93,7 @@ let
     11 14 19 14 19 23 19 23 26 23 26 31 26 31 35 38
   ] row;
 
-  bridgeLeadEcho = echo bridgeLead;
+  bridgeLeadEcho = echo 6 bridgeLead;
 
   intro = mkSong {
     tracks = [
