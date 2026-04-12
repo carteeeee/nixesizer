@@ -1,4 +1,6 @@
 let
+  bassWavetable = map (x: x / 256.0) [44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 44 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 211 210 209 209 207 206 205 204 203 202 201 200 198 197 197 196 194 194 193 191 190 189 188 187 186 185 184 182 182 181 180 178 178 176 175 174 173 172 171 170 169 168 166 166 165 164 162 162 161 159 158 157 157 155 154 153 153 151 150 149 148 147 145 145 143 142 141 141 139 138 137 136 135 134 133 132 131 129 129];
+
   inherit (import ./nixesizer) mkWav mkSong insts ptrns scales utils;
   rate = 48000;
   depth = 4;
@@ -8,8 +10,8 @@ let
   
   base = 36299 / (utils.pow 2 7);
 
-  bass     = {vol = (1.0 / 16.0); inst = insts.sqr; scale = scales.western (base / 8);};
-  harmony  = {vol = (1.0 / 16.0); inst = insts.sqr; scale = scales.western (base / 2);};
+  bass     = {vol = (1.0 / 8.0); inst = insts.wavetable bassWavetable; scale = scales.western (base / 8);};
+  harmony  = {vol = (1.0 / 32.0); inst = insts.sqr; scale = scales.western (base / 2);};
   eek      = {vol = (1.0 / 16.0); inst = insts.saw; scale = scales.western (base * 4);};
   lead     = {vol = (1.0 / 8.0); inst = insts.tri; scale = scales.western base;};
   leadEcho = lead // {vol = (1.0 / 32.0);};
@@ -90,6 +92,10 @@ let
         (ptrns.arp [16 n n n] row 3)
         (ptrns.hold 19 row 4)
       ];})
+      (lead // {ptrn = ptrns.concat [
+        (ptrns.empty row 60)
+        (ptrns.hold 7 row 4)
+      ];})
       (eek // {ptrn = ptrns.concat [
         (ptrns.empty row 56)
         (ptrns.hold 0 row 4)
@@ -116,6 +122,6 @@ let
   };
 in
   mkWav {
-    data = [intro part1];
+    data = [intro part1 part1];
     inherit rate depth;
   } "nixesizer-example"

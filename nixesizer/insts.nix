@@ -7,7 +7,7 @@ in rec {
   # creates an INSTRUMENT that uses a wavetable
   # algorithm with `table`
   wavetable = table: f: t:
-    elemAt table (floor (mod (t * f) (length table)));
+    elemAt table (floor (mod (t * f * (length table)) (length table)));
   # basic sawtooth INSTRUMENT
   saw = f: t: mod (f * -t) 1.0;
   # basic square INSTRUMENT
